@@ -66,10 +66,10 @@ function db_insert($tbl, $data, $primary = '?')
     $values = "'" . implode("', '", array_values($data)) . "'";
 
     $d = now('d');
-    $sql_insert = "INSERT INTO {$tbl}({$fields}) VALUES({$values})";
+    $sql = "INSERT INTO {$tbl}({$fields}) VALUES({$values})";
 
-    $query_ = mysqli_query($conn, $sql_insert);
-    write_log($sql_insert,  __DIR__ . "/../../logs/process/query_insert_{$d}.txt");
+    $query_ = mysqli_query($conn, $sql);
+    write_log($sql,  __DIR__ . "/../../logs/process/query_insert_{$d}.txt");
 
     mysqli_close($conn);
     if ($query_) {
@@ -100,10 +100,10 @@ function db_update($tbl, $data, $condi)
 
     $conn = db_connect();
     $d = now('d');
-    $sql_upd = "UPDATE {$tbl} SET {$fields} WHERE {$condi}";
-    write_log($sql_upd,  __DIR__ . "/../../logs/process/query_update_{$d}.txt");
+    $sql = "UPDATE {$tbl} SET {$fields} WHERE {$condi}";
+    write_log($sql,  __DIR__ . "/../../logs/process/query_update_{$d}.txt");
 
-    $query_upd = mysqli_query($conn, $sql_upd);
+    $query_upd = mysqli_query($conn, $sql);
 
     mysqli_close($conn);
     return ($query_upd) ? true : false;
@@ -135,7 +135,7 @@ function db_delete($tbl, $where)
     $sql = "DELETE FROM {$tbl} WHERE {$whereClause}";
     $query_ = mysqli_query($conn, $sql);
     mysqli_close($conn);
-    
+
     write_log($sql,  __DIR__ . "/../../logs/process/query_delete_{$d}.txt");
     return ($query_) ? true : false;
 }
