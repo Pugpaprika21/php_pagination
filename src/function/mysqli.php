@@ -114,18 +114,28 @@ function db_update($tbl, $data, $condi)
  * #db_delete('USER_TB', "USR_ID = '1'");
  *
  * @param string $tbl
- * @param array|string $condi
+ * @param array|string $where
  * @return bool
  */
-function db_delete($tbl, $condi)
+function db_delete($tbl, $where)
 {
-    $conn = db_connect();
-    $sql_del = "DELETE FROM {$tbl} WHERE {$condi}";
     $d = now('d');
+    $conn = db_connect();
 
-    $query_del = mysqli_query($conn, $sql_del);
-    write_log($sql_del,  __DIR__ . "/../../logs/process/query_delete_{$d}.txt");
+    if (is_array($where)) {
+        $whereClause = '';
+        foreach ($where as $column => $value) {
+            $whereClause .= "{$column} = '{$value}' AND ";
+        }
+        $whereClause = rtrim($whereClause, ' AND ');
+    } else {
+        $whereClause = $where;
+    }
 
+    $sql = "DELETE FROM {$tbl} WHERE {$whereClause}";
+    $query_ = mysqli_query($conn, $sql);
     mysqli_close($conn);
-    return ($query_del) ? true : false;
+    
+    write_log($sql,  __DIR__ . "/../../logs/process/query_delete_{$d}.txt");
+    return ($query_) ? true : false;
 }
