@@ -133,9 +133,10 @@ function db_delete($tbl, $where)
     }
 
     $sql = "DELETE FROM {$tbl} WHERE {$whereClause}";
+    write_log($sql,  __DIR__ . "/../../logs/process/query_delete_{$d}.txt");
+
     $query_ = mysqli_query($conn, $sql);
     mysqli_close($conn);
-
-    write_log($sql,  __DIR__ . "/../../logs/process/query_delete_{$d}.txt");
+    
     return ($query_) ? true : false;
 }
